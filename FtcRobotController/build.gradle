@@ -8,7 +8,6 @@ apply plugin: 'com.android.library'
 android {
 
     defaultConfig {
-        applicationId 'com.qualcomm.ftcrobotcontroller'
         minSdkVersion 24
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 28

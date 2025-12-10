@@ -7,43 +7,34 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.arcrobotics.ftclib.*;
+import com.qualcomm.robotcore.robot.Robot;
+
+import org.firstinspires.ftc.teamcode.RobotHardware;
+import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
 
 @TeleOp(name = "test", group = "teleops")
 public class TestDriveTrain extends LinearOpMode {
-    private final DcMotorEx frontLeftMotor;
-    private final DcMotorEx frontRightMotor;
-    private final DcMotorEx backLeftMotor;
-    private final DcMotorEx backRightMotor;
 
+    private RobotHardware robot;
 
+    private Outtake outtake;
 
-    private final DcMotorEx flywheelMotor;
-
-    private PIDCoefficients flywheelCoeffs = new PIDCoefficients();
-//    private PIDFController flywheelPIDController = new PIDFController(flywheelCoeffs);
-
-    public TestDriveTrain () {
-
-        /*
-        * Set up the drive train motors
-        * */
-        frontLeftMotor = hardwareMap.get(DcMotorEx.class, "Front Left Motor");
-        frontRightMotor = hardwareMap.get(DcMotorEx.class, "Front Right Motor");
-        backLeftMotor = hardwareMap.get(DcMotorEx.class, "Back Left Motor");
-        backRightMotor = hardwareMap.get(DcMotorEx.class, "Back Right Motor");
-
-        /*
-        *
-        * */
-        flywheelMotor = hardwareMap.get(DcMotorEx.class, "");
-
-    }
 
     @Override
     public void runOpMode() throws InterruptedException {
+
+        //*
+        // Always setup robot before turning on
+        // *//
+        robot = new RobotHardware(this);
+        outtake = robot.getOuttake();
+
+        robot.init();
+        waitForStart();
+
         while (opModeIsActive()) {
-            flywheelMotor.setPower(1.0);
+            outtakeControl();
         }
     }
 
@@ -52,4 +43,8 @@ public class TestDriveTrain extends LinearOpMode {
         double y = gamepad1.left_stick_y;
     }
 
+
+    public void outtakeControl () {
+        outtake.testRunMotorForward();
+    }
 }
