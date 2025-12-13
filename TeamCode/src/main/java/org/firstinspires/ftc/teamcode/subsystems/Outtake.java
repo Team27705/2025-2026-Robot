@@ -19,5 +19,9 @@ public class Outtake {
         flywheelMotor.setPower(0.80);
     }
 
+    public void idle() {
+        flywheelMotor.setPower(0.1);
+    }
+
 
 }

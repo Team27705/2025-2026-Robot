@@ -13,6 +13,8 @@ public class RobotHardware {
     private Outtake outtake;
     private Intake intake;
 
+    private Drivetrain drivetrain;
+
     private LinearOpMode opMode;
 
     /*
@@ -25,8 +27,13 @@ public class RobotHardware {
 
         outtake = new Outtake(myOpMode.hardwareMap);
         intake = new Intake(myOpMode.hardwareMap);
+        drivetrain = new Drivetrain(myOpMode.hardwareMap);
 
 
+    }
+
+    public Drivetrain getDrivetrain() {
+        return drivetrain;
     }
 
     public void init() {
