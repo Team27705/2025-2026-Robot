@@ -27,6 +27,7 @@ public class Indexer {
         spindexerMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         spindexerMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         storage = new String[3];
+        bootkicker.setDirection(Servo.Direction.REVERSE);
     }
 
     public void testMotor () {
@@ -44,6 +45,8 @@ public class Indexer {
 
     public void kick () {
         bootkicker.setPosition(120);
+    }
+    public void reset() {
         bootkicker.setPosition(0);
     }
 

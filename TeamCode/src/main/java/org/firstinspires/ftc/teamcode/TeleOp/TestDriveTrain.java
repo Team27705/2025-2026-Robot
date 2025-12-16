@@ -144,6 +144,10 @@ public class TestDriveTrain extends LinearOpMode {
             indexer.kick();
         }
 
+        if (gamepad2.dpadDownWasPressed()) {
+            indexer.reset();
+        }
+
         //shooting sequenence
     }
 
