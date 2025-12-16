@@ -13,15 +13,28 @@ public class Indexer {
     private Servo bootkicker;
     private DcMotor spindexerMotor;
 
+    private int position;
+    private String[] storage;
+
+    //*
+    // Gear ratio is 5:1 RPM is
+    // *//
+
     public Indexer (HardwareMap hardwareMap){
         bootkicker = hardwareMap.get(Servo.class, "bootkicker");
         spindexerMotor = hardwareMap.get(DcMotor.class, "spindexer");
 
+        spindexerMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        spindexerMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        storage = new String[3];
     }
 
     public void testMotor () {
         spindexerMotor.setPower(0.5);
-        spindexerMotor.setTargetPosition(4000);
+        spindexerMotor.setTargetPosition(400);
+    }
+
+    public void cycleOnce () {
     }
 
     public void servoTest () {
