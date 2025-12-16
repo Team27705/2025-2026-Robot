@@ -35,11 +35,16 @@ public class Indexer {
     }
 
     public void cycleOnce () {
+
     }
 
     public void servoTest () {
-
+        bootkicker.setPosition(0);
     }
 
+    public void kick () {
+        bootkicker.setPosition(120);
+        bootkicker.setPosition(0);
+    }
 
 }

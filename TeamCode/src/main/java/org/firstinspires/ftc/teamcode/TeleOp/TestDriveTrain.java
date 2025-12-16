@@ -52,12 +52,14 @@ public class TestDriveTrain extends LinearOpMode {
 
         waitForStart();
         robot.init();
+        indexer.servoTest();
 
         while (opModeIsActive()) {
             controllerBehaviorA();
             controllerBehaviorB();
             updateTelem();
         }
+
 
     }
 
@@ -120,8 +122,6 @@ public class TestDriveTrain extends LinearOpMode {
     }
 
     public void controllerBehaviorB () {
-        double x = gamepad2.left_stick_x;
-        double y = gamepad2.left_stick_y;
 
         /*
         * this part is for enabling the intake
@@ -130,7 +130,7 @@ public class TestDriveTrain extends LinearOpMode {
         * press x again to bring back to idle
         * */
         if (gamepad2.xWasPressed()) {
-            outtake.testRunMotorForward();
+            outtake.runOuttake();
 
         }
         if (gamepad2.bWasPressed()) {
@@ -140,6 +140,11 @@ public class TestDriveTrain extends LinearOpMode {
         if (gamepad2.yWasPressed()) {
             indexer.testMotor();
         }
+        if (gamepad2.aWasPressed()) {
+            indexer.kick();
+        }
+
+        //shooting sequenence
     }
 
     public void updateTelem () {
