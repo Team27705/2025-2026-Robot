@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.robot.Robot;
 
 import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.Indexer;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
@@ -25,8 +26,14 @@ public class TestDriveTrain extends LinearOpMode {
     private Outtake outtake;
 
     private Intake intake;
+    private Indexer indexer;
 
-
+    public static enum StartingPosition {
+        RedWallStart,
+        BlueWallStart,
+        Red,
+        Blue
+    }
 
 
     @Override
@@ -41,18 +48,18 @@ public class TestDriveTrain extends LinearOpMode {
         outtake = robot.getOuttake();
         intake = robot.getIntake();
         drivetrain = robot.getDrivetrain();
-        robot.init();
-
+        indexer = robot.getIndexer();
 
         waitForStart();
-        outtake.testRunMotorForward();
-
+        robot.init();
 
         while (opModeIsActive()) {
             controllerBehaviorA();
             controllerBehaviorB();
 
         }
+
+
     }
 
     public void handleControls() {
@@ -62,10 +69,11 @@ public class TestDriveTrain extends LinearOpMode {
 
     //let A be driver
     public void controllerBehaviorA () {
-        double leftX = gamepad1.left_stick_x * 1.1; //counter imperfect strafing
-        double leftY = -gamepad1.left_stick_y;
 
-        double rightX = gamepad1.right_stick_x; //rotation
+        double leftX = gamepad1.left_stick_x * 1.1; //counter imperfect strafing, straffing
+        double leftY = -gamepad1.left_stick_y; //forward and backward
+
+        double rightX = gamepad1.right_stick_x * 1.1; //rotation
         double rightY = gamepad1.right_stick_y;
 
         boolean leftbumper = gamepad1.left_bumper;
@@ -128,6 +136,10 @@ public class TestDriveTrain extends LinearOpMode {
         }
         if (gamepad2.bWasPressed()) {
             outtake.idle();
+        }
+
+        if (gamepad2.yWasPressed()) {
+            indexer.testMotor();
         }
     }
 

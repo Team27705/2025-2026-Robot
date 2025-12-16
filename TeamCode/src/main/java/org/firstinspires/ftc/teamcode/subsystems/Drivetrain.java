@@ -1,7 +1,14 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Drivetrain {
 
@@ -10,32 +17,67 @@ public class Drivetrain {
     private final DcMotor leftBack;
     private final DcMotor rightBack;
 
+    private final GoBildaPinpointDriver odo;
     private double speedMultipler;
 
-    public Drivetrain (HardwareMap hardwareMap) {
+    private double xOffset = -194.6;
+    private double yOffset = 2.8;
 
+    public Drivetrain (HardwareMap hardwareMap) {
 
         leftFront = hardwareMap.get(DcMotor.class, "leftFront");
         rightFront = hardwareMap.get(DcMotor.class, "rightFront");
         leftBack = hardwareMap.get(DcMotor.class, "leftBack");
         rightBack = hardwareMap.get(DcMotor.class, "rightBack");
 
+        odo = hardwareMap.get(GoBildaPinpointDriver.class, "odometry");
+
         speedMultipler = 0.4;
 
         setAllDriveMotorBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        setOdometry();
+
+
     }
 
+    public void setOdometry () {
+        odo.setOffsets(xOffset, yOffset, DistanceUnit.INCH);
+        odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD,  GoBildaPinpointDriver.EncoderDirection.FORWARD);
+
+        odo.resetPosAndIMU();
+
+    }
+
+//    public void setPosition (StartingPositions) {
+//        if (StartingPositions.) {
+//
+//        }
+//        odo.setPosition();
+//    }
+
+//    public void odometryTelem () {
+//        TelemetryPacket telemetryPacket = new TelemetryPacket();
+//    }
+
+    public void setDrivetrainPower (double drive, double strafe, double turn) {
 
 
+        double denominator = Math.max(Math.abs(drive) + Math.abs(strafe) + Math.abs(turn), 1);
+        double lfV = ((drive + strafe + turn) / denominator);
+        double lbV = ((drive - strafe + turn) / denominator);
+        double rfV = ((drive - strafe - turn) / denominator);
+        double rbV = ((drive + strafe - turn) / denominator);
 
-    public void setDrivetrainPower (double y, double x, double rx) {
-
-
-        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-        double lfV = ((y + x + rx) / denominator) * speedMultipler;
-        double lbV = ((y - x + rx) / denominator) * speedMultipler;
-        double rfV = ((y - x - rx) / denominator) * speedMultipler;
-        double rbV = ((y + x - rx) / denominator)* speedMultipler;
+//        if () {
+//
+//        }
+//        if () {
+//
+//        }
+//        if () {
+//
+//        }
 
         leftFront.setPower(lfV);
         rightFront.setPower(rfV);

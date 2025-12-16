@@ -1,19 +1,20 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.teamcode.subsystems.Indexer;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Limelight;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
-import org.firstinspires.ftc.teamcode.subsystems.Sensors.PinpointComputer;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.subsystems.Sensors.Limelight;
 
 public class RobotHardware {
     private Outtake outtake;
     private Intake intake;
+    private Indexer indexer;
 
     private Drivetrain drivetrain;
+
 
     private LinearOpMode opMode;
 
@@ -27,9 +28,8 @@ public class RobotHardware {
 
         outtake = new Outtake(myOpMode.hardwareMap);
         intake = new Intake(myOpMode.hardwareMap);
+        indexer = new Indexer(myOpMode.hardwareMap);
         drivetrain = new Drivetrain(myOpMode.hardwareMap);
-
-
     }
 
     public Drivetrain getDrivetrain() {
@@ -46,5 +46,9 @@ public class RobotHardware {
 
     public Intake getIntake() {
         return intake;
+    }
+
+    public Indexer getIndexer() {
+        return indexer;
     }
 }
