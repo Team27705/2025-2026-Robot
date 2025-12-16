@@ -56,6 +56,7 @@ public class TestDriveTrain extends LinearOpMode {
         while (opModeIsActive()) {
             controllerBehaviorA();
             controllerBehaviorB();
+            updateTelem();
         }
 
     }
@@ -145,5 +146,6 @@ public class TestDriveTrain extends LinearOpMode {
 
         //colorsensor
         telemetry.addData("\n", intake.colorDetected());
+        telemetry.update();
     }
 }
