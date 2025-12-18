@@ -138,7 +138,7 @@ public class TestDriveTrain extends LinearOpMode {
         }
 
         if (gamepad2.yWasPressed()) {
-            indexer.testMotor();
+            indexer.testCycleOnce();
         }
         if (gamepad2.aWasPressed()) {
             indexer.kick();
@@ -155,6 +155,7 @@ public class TestDriveTrain extends LinearOpMode {
 
         //colorsensor
         telemetry.addData("\n", intake.colorDetected());
+        telemetry.addData("\n", indexer.telemetry());
         telemetry.update();
     }
 }
