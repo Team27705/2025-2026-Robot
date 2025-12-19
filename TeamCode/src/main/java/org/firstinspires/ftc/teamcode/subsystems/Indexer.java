@@ -50,8 +50,7 @@ public class Indexer {
 
 
     public boolean canSpin () {
-        return spindexerMotor.getCurrentPosition() == oneCycle
-                && spindexerMotor.getMode().equals(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //maybe use motorReset variable instead
+        return spindexerMotor.getMode().equals(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //maybe use motorReset variable instead
     }
 
     public void cycleOnce () {
@@ -61,7 +60,7 @@ public class Indexer {
     }
 
     public void motorStatus () {
-        if (spindexerMotor.getCurrentPosition() == oneCycle) { // maybe subtract a little from onecycle to account for momentum
+        if (spindexerMotor.getCurrentPosition() == oneCycle) { // maybe subtract a little from onecycle to account for momentum, also use != maybe?
             motorReset = true;
         }
         if (motorReset) {
