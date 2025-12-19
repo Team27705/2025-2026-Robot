@@ -96,6 +96,7 @@ public class TestDriveTrain extends LinearOpMode {
 
         drivetrain.setDrivetrainPower(leftY, leftX, rightX);
 
+
         /*
         * set up deadzone of 0.1 for each controller
         * */
@@ -135,28 +136,10 @@ public class TestDriveTrain extends LinearOpMode {
         if (gamepad2.bWasPressed()) {
             outtake.idle();
         }
-        if (gamepad2.y) {
-            indexer.setToRun();
+
+        if (gamepad2.yWasPressed()) {
+            indexer.testCycleOnce();
         }
-        if (indexer.motorStatus()) {
-            indexer.checkMotorEncoder();
-        }
-
-        if (gamepad2.yWasPressed()) { //check if y is pressed
-            //indexer.runTillCycleOnce();
-            telemetry.addData("\n button pressed: ", gamepad2.yWasPressed());
-            telemetry.update();
-        }
-        telemetry.addData("\n button pressed: ", gamepad2.yWasPressed());
-
-
-        if (gamepad2.yWasReleased()){
-            indexer.checkMotorEncoder();
-            indexer.setPower(0);
-        }
-        telemetry.addData("\n button released: ", gamepad2.yWasReleased());
-
-
         if (gamepad2.aWasPressed()) {
             indexer.kick();
         }

@@ -12,22 +12,23 @@ public class Indexer {
 
     private Servo bootkicker;
     private DcMotor spindexerMotor;
-    private double PPR = 28.0;
+    private double PPR = 7.0;
     private double GEARBOX_RATIO = 50.9;
-    private double MOTOR_GEARBOX_PPR = 356.3 * 4; //ppr * 4 internal ticks of andriod studio
-
-
-    private int enc = (int) (MOTOR_GEARBOX_PPR * (120 / 72));
+    private double MOTOR_GEARBOX_PPR = 356.3;
 
     private double indexerGearUp = 5.0;
+
 
     private final double ROTATE_TO_OUTTAKE_ANGLE = 120/72;
     private final double SPINDEXER_MOTOR_RPM = 6600/50.9; //129.666012 on website is 130
 
-    private final int ONE_CYCLE_ENCODER_AMOUNT = (int) ((MOTOR_GEARBOX_PPR * ROTATE_TO_OUTTAKE_ANGLE ) + 1 * SPINDEXER_MOTOR_RPM);
+    private final int ONE_CYCLE_ENCODER_AMOUNT = (int) (MOTOR_GEARBOX_PPR * ROTATE_TO_OUTTAKE_ANGLE) + 1;
 
-    private final double bigWheelDiameter = (292.5 / 25.4) * 25.4 * Math.PI; //mm to inches
-    private final double smallWheelDiameter = (58.5 / 25.4) * 25.4 * Math.PI; //mm to inches
+    private final double oneCycle = 1453.2 * ROTATE_TO_OUTTAKE_ANGLE; //2422
+
+    private boolean motorReset = false;
+
+    private int position;
     private String[] storage;
 
     //**
@@ -41,48 +42,42 @@ public class Indexer {
     public Indexer (HardwareMap hardwareMap){
         bootkicker = hardwareMap.get(Servo.class, "bootkicker");
         spindexerMotor = hardwareMap.get(DcMotor.class, "spindexer");
-        spindexerMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        spindexerMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         storage = new String[3];
         bootkicker.setDirection(Servo.Direction.REVERSE);
+
+        spindexerMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
 
+    public boolean canSpin () {
+        return spindexerMotor.getMode().equals(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //maybe use motorReset variable instead
+    }
 
-    public void setToRun () {
-
-        spindexerMotor.setTargetPosition(enc);
+    public void cycleOnce () {
+        spindexerMotor.setTargetPosition((int)oneCycle);
         spindexerMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        spindexerMotor.setPower(.5);
     }
 
-
-    public void checkMotorEncoder() {
-        if (spindexerMotor.getCurrentPosition() >= enc) {
+    public void motorStatus () {
+        if (spindexerMotor.getCurrentPosition() == oneCycle) { // maybe subtract a little from onecycle to account for momentum, also use != maybe?
+            motorReset = true;
+        }
+        if (motorReset) {
             spindexerMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            spindexerMotor.setPower(0);
-        }
-        else  {
-            spindexerMotor.setPower(.5);
+            motorReset = false;
         }
     }
-    public void setPower (double x) {
-        spindexerMotor.setPower(x);
-    }
-    public boolean motorStatus () {
-        return  spindexerMotor.isBusy();
-    }
 
-    public void servoTest () {
-        bootkicker.setPosition(0);
-    }
 
-    public void kick () {
-        bootkicker.setPosition(105);
+    public void kick() {
+        if (bootkicker.getPosition() < 105) {
+            bootkicker.setPosition(105);
+        }
+        else {
+            bootkicker.setPosition(0);
+        }
     }
-    public void reset() {
-        bootkicker.setPosition(0);
-    }
-
     public String telemetry () {
         String telemMessage = "";
         telemMessage += "\nSpindexer Motor Encoder : " + spindexerMotor.getCurrentPosition();
@@ -94,7 +89,7 @@ public class Indexer {
 
     public String isSpinning () {
         String telemMessage = "\n Indexer Status: ";
-        if (!spindexerMotor.isBusy()) {
+        if (spindexerMotor.getCurrentPosition() != oneCycle) {
             telemMessage = "'\n Spindexer Status: Currently spinning";
         }
         else {

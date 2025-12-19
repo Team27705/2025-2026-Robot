@@ -51,4 +51,11 @@ public class RobotHardware {
     public Indexer getIndexer() {
         return indexer;
     }
+
+    public void close () {
+        outtake = null;
+        intake = null;
+        indexer = null;
+        drivetrain = null;
+    }
 }
