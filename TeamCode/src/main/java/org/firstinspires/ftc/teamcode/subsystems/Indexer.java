@@ -12,18 +12,22 @@ public class Indexer {
 
     private Servo bootkicker;
     private DcMotor spindexerMotor;
-    private double PPR = 7.0;
+    private double PPR = 28.0;
     private double GEARBOX_RATIO = 50.9;
-    private double MOTOR_GEARBOX_PPR = 356.3;
+    private double MOTOR_GEARBOX_PPR = 356.3 * 4; //ppr * 4 internal ticks of andriod studio
+
+
+    private int enc = (int) (MOTOR_GEARBOX_PPR * (120 / 72));
 
     private double indexerGearUp = 5.0;
 
     private final double ROTATE_TO_OUTTAKE_ANGLE = 120/72;
     private final double SPINDEXER_MOTOR_RPM = 6600/50.9; //129.666012 on website is 130
 
-    private final int ONE_CYCLE_ENCODER_AMOUNT = (int) (MOTOR_GEARBOX_PPR * ROTATE_TO_OUTTAKE_ANGLE) + 1;
+    private final int ONE_CYCLE_ENCODER_AMOUNT = (int) ((MOTOR_GEARBOX_PPR * ROTATE_TO_OUTTAKE_ANGLE ) + 1 * SPINDEXER_MOTOR_RPM);
 
-    private int position;
+    private final double bigWheelDiameter = (292.5 / 25.4) * 25.4 * Math.PI; //mm to inches
+    private final double smallWheelDiameter = (58.5 / 25.4) * 25.4 * Math.PI; //mm to inches
     private String[] storage;
 
     //**
@@ -43,17 +47,26 @@ public class Indexer {
         bootkicker.setDirection(Servo.Direction.REVERSE);
     }
 
-    public void testCycleOnce () {
-        spindexerMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        spindexerMotor.setTargetPosition(ONE_CYCLE_ENCODER_AMOUNT);
+
+
+    public void setToRun () {
+
+        spindexerMotor.setTargetPosition(enc);
         spindexerMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        if (spindexerMotor.isBusy()) {
-            spindexerMotor.setPower(.5);
-        }
-        else {
+    }
+
+
+    public void checkMotorEncoder() {
+        if (spindexerMotor.getCurrentPosition() >= enc) {
+            spindexerMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             spindexerMotor.setPower(0);
         }
-
+        else  {
+            spindexerMotor.setPower(.5);
+        }
+    }
+    public void setPower (double x) {
+        spindexerMotor.setPower(x);
     }
     public boolean motorStatus () {
         return  spindexerMotor.isBusy();
@@ -64,7 +77,7 @@ public class Indexer {
     }
 
     public void kick () {
-        bootkicker.setPosition(120);
+        bootkicker.setPosition(105);
     }
     public void reset() {
         bootkicker.setPosition(0);
