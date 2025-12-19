@@ -52,13 +52,14 @@ public class TestDriveTrain extends LinearOpMode {
 
         waitForStart();
         robot.init();
-        indexer.servoTest();
 
         while (opModeIsActive()) {
             controllerBehaviorA();
             controllerBehaviorB();
             updateTelem();
         }
+
+        robot.close();
 
 
     }
@@ -131,29 +132,30 @@ public class TestDriveTrain extends LinearOpMode {
         * */
         if (gamepad2.xWasPressed()) {
             outtake.runOuttake();
-
         }
         if (gamepad2.bWasPressed()) {
             outtake.idle();
         }
 
-        if (gamepad2.yWasPressed()) {
-            indexer.testCycleOnce();
-        }
         if (gamepad2.aWasPressed()) {
             indexer.kick();
         }
-
-        if (gamepad2.dpadDownWasPressed()) {
-            indexer.reset();
+        // if the encoder is
+        if (!indexer.canSpin()) {
+            if (gamepad2.y){
+                indexer.cycleOnce();
+            }
+        }
+        else {
+            indexer.motorStatus();
         }
 
-        //shooting sequenence
+        //shooting sequence
     }
 
     public void updateTelem () {
 
-        //colorsensor
+        //color sensor
         telemetry.addData("\n", intake.colorDetected());
         telemetry.addData("\n", indexer.telemetry());
         telemetry.update();
