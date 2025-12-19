@@ -18,13 +18,13 @@ public class Indexer {
 
     private double indexerGearUp = 5.0;
 
-
-    private final double ROTATE_TO_OUTTAKE_ANGLE = 120/72;
     private final double SPINDEXER_MOTOR_RPM = 6600/50.9; //129.666012 on website is 130
 
-    private final int ONE_CYCLE_ENCODER_AMOUNT = (int) (MOTOR_GEARBOX_PPR * ROTATE_TO_OUTTAKE_ANGLE) + 1;
+//    private final int ONE_CYCLE_ENCODER_AMOUNT = (int) (MOTOR_GEARBOX_PPR * ROTATE_TO_OUTTAKE_ANGLE) + 1;
 
-    private final double oneCycle = 1453.2 * ROTATE_TO_OUTTAKE_ANGLE; //2422
+    private final double oneCycle = 1453.2 * 120/72; //2422
+
+    private final int error = 75; ///50 FOR 0.5 POWER
 
     private boolean motorReset = false;
 
@@ -54,13 +54,13 @@ public class Indexer {
     }
 
     public void cycleOnce () {
-        spindexerMotor.setTargetPosition((int)oneCycle);
+        spindexerMotor.setTargetPosition((int)oneCycle - error);
         spindexerMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        spindexerMotor.setPower(.5);
+        spindexerMotor.setPower(.7);
     }
 
     public void motorStatus () {
-        if (spindexerMotor.getCurrentPosition() == oneCycle) { // maybe subtract a little from onecycle to account for momentum, also use != maybe?
+        if (spindexerMotor.getCurrentPosition() == (int) oneCycle - error) { // maybe subtract a little from onecycle to account for momentum, also use != maybe?
             motorReset = true;
         }
         if (motorReset) {
@@ -71,7 +71,7 @@ public class Indexer {
 
 
     public void kick() {
-        if (bootkicker.getPosition() < 105) {
+        if (bootkicker.getPosition() == 0) {
             bootkicker.setPosition(105);
         }
         else {

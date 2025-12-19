@@ -50,15 +50,16 @@ public class TestDriveTrain extends LinearOpMode {
         drivetrain = robot.getDrivetrain();
         indexer = robot.getIndexer();
 
-        waitForStart();
         robot.init();
-        indexer.servoTest();
+        waitForStart();
 
         while (opModeIsActive()) {
             controllerBehaviorA();
             controllerBehaviorB();
             updateTelem();
         }
+
+        robot.close();
 
 
     }
@@ -83,10 +84,10 @@ public class TestDriveTrain extends LinearOpMode {
 
 
         /*
-        *Mecanum control
-        * DPAD change
-        * Default mode is B up is max(.8-9) normal is (.45-5) min is (.3.25)
-        * */
+         *Mecanum control
+         * DPAD change
+         * Default mode is B up is max(.8-9) normal is (.45-5) min is (.3.25)
+         * */
         if (gamepad1.dpadUpWasPressed()) {
             drivetrain.setSpeedMultiplier(true);
         }
@@ -98,8 +99,8 @@ public class TestDriveTrain extends LinearOpMode {
 
 
         /*
-        * set up deadzone of 0.1 for each controller
-        * */
+         * set up deadzone of 0.1 for each controller
+         * */
         if (leftX <= -0.1 && leftY >= 0.1) {
             leftY = 0;
             leftY = 0;
@@ -124,36 +125,37 @@ public class TestDriveTrain extends LinearOpMode {
     public void controllerBehaviorB () {
 
         /*
-        * this part is for enabling the intake
-        * let it spin at low while idling
-        * then ramp up when "x" has been pressed
-        * press x again to bring back to idle
-        * */
+         * this part is for enabling the intake
+         * let it spin at low while idling
+         * then ramp up when "x" has been pressed
+         * press x again to bring back to idle
+         * */
         if (gamepad2.xWasPressed()) {
             outtake.runOuttake();
-
         }
         if (gamepad2.bWasPressed()) {
             outtake.idle();
         }
 
-        if (gamepad2.yWasPressed()) {
-            indexer.testCycleOnce();
-        }
-        if (gamepad2.aWasPressed()) {
+        if (gamepad2.a) {
             indexer.kick();
         }
-
-        if (gamepad2.dpadDownWasPressed()) {
-            indexer.reset();
+        // if the encoder is
+        if (indexer.canSpin()) {
+            if (gamepad2.y){
+                indexer.cycleOnce();
+            }
+        }
+        else { // this checks if the motor has reached positio nif it has then reset encoder
+            indexer.motorStatus();
         }
 
-        //shooting sequenence
+        //shooting sequence
     }
 
     public void updateTelem () {
 
-        //colorsensor
+        //color sensor
         telemetry.addData("\n", intake.colorDetected());
         telemetry.addData("\n", indexer.telemetry());
         telemetry.update();
