@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import static android.os.SystemClock.sleep;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -34,12 +36,44 @@ public class Drivetrain {
 
         speedMultipler = 0.4;
 
-        setAllDriveMotorBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftBack.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        setAllDriveMotorBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         setOdometry();
+
+
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
     }
 
+    public void testWheel () {
+            leftFront.setPower(0.5);
+            sleep(4000);
+            leftFront.setPower(0);
+
+            rightFront.setPower(.5);
+            sleep(4000);
+            rightFront.setPower(0);
+
+            leftBack.setPower(.5);
+            sleep(4000);
+            leftBack.setPower(0);
+
+
+            rightBack.setPower(0.5);
+            sleep(4000);
+            rightBack.setPower(0);
+
+    }
     public void setOdometry () {
         odo.setOffsets(xOffset, yOffset, DistanceUnit.INCH);
         odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
@@ -64,20 +98,13 @@ public class Drivetrain {
 
 
         double denominator = Math.max(Math.abs(drive) + Math.abs(strafe) + Math.abs(turn), 1);
-        double lfV = ((drive + strafe + turn) / denominator);
+
+        //10000% need to apply some kind of PID for all motors or get the drive train motors really close on tolerance
+
+        double lfV = 0.25 * ((drive + strafe + turn) / denominator); //front left motor spins considerably faster than the other motors
         double lbV = ((drive - strafe + turn) / denominator);
         double rfV = ((drive - strafe - turn) / denominator);
         double rbV = ((drive + strafe - turn) / denominator);
-
-//        if () {
-//
-//        }
-//        if () {
-//
-//        }
-//        if () {
-//
-//        }
 
         leftFront.setPower(lfV);
         rightFront.setPower(rfV);

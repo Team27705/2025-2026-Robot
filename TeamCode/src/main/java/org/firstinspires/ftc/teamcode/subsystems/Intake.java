@@ -24,7 +24,7 @@ public class Intake {
 //    }
 
     public void idleIntake() {
-        intakeMotor.setPower(-0.10);
+        intakeMotor.setPower(0);
     }
     public void spinIntake () {
         intakeMotor.setPower(-0.8);

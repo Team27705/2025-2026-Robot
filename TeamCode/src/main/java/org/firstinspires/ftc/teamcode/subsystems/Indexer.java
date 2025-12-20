@@ -53,6 +53,9 @@ public class Indexer {
         return spindexerMotor.getMode().equals(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //maybe use motorReset variable instead
     }
 
+    public void resetServo() {
+        bootkicker.setPosition(0);
+    }
     public void cycleOnce () {
         spindexerMotor.setTargetPosition((int)oneCycle - error);
         spindexerMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -71,12 +74,8 @@ public class Indexer {
 
 
     public void kick() {
-        if (bootkicker.getPosition() == 0) {
+
             bootkicker.setPosition(105);
-        }
-        else {
-            bootkicker.setPosition(0);
-        }
     }
     public String telemetry () {
         String telemMessage = "";

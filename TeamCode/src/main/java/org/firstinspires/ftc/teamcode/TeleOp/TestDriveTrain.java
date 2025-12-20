@@ -50,8 +50,8 @@ public class TestDriveTrain extends LinearOpMode {
         drivetrain = robot.getDrivetrain();
         indexer = robot.getIndexer();
 
-        robot.init();
         waitForStart();
+        robot.init();
 
         while (opModeIsActive()) {
             controllerBehaviorA();
@@ -72,10 +72,10 @@ public class TestDriveTrain extends LinearOpMode {
     //let A be driver
     public void controllerBehaviorA () {
 
-        double leftX = gamepad1.left_stick_x * 1.1; //counter imperfect strafing, straffing
-        double leftY = -gamepad1.left_stick_y; //forward and backward
+        double leftX = gamepad1.left_stick_x ; //counter imperfect strafing, straffing
+        double leftY = gamepad1.left_stick_y ; //forward and backward
 
-        double rightX = gamepad1.right_stick_x * 1.1; //rotation
+        double rightX = gamepad1.right_stick_x ; //rotation
         double rightY = gamepad1.right_stick_y;
 
         boolean leftbumper = gamepad1.left_bumper;
@@ -95,7 +95,7 @@ public class TestDriveTrain extends LinearOpMode {
             drivetrain.setSpeedMultiplier(false);
         }
 
-        drivetrain.setDrivetrainPower(leftY, leftX, rightX);
+        drivetrain.setDrivetrainPower(leftY,leftX , rightX);
 
 
         /*
@@ -109,6 +109,7 @@ public class TestDriveTrain extends LinearOpMode {
             rightX = 0;
             rightY = 0;
         }
+
         /*
         / Driver controls intake w/ Left bumper and right bumper
          */
@@ -118,8 +119,6 @@ public class TestDriveTrain extends LinearOpMode {
         if (rightbumper) {
             intake.idleIntake();
         }
-
-
     }
 
     public void controllerBehaviorB () {
@@ -137,8 +136,11 @@ public class TestDriveTrain extends LinearOpMode {
             outtake.idle();
         }
 
-        if (gamepad2.a) {
+        if (gamepad2.dpad_up) {
             indexer.kick();
+        }
+        if (gamepad2.dpad_down){
+            indexer.resetServo();
         }
         // if the encoder is
         if (indexer.canSpin()) {
