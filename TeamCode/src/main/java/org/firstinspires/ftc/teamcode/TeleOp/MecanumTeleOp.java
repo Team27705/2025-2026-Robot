@@ -1,13 +1,7 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
-import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.PIDCoefficients;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
-import com.arcrobotics.ftclib.*;
-import com.qualcomm.robotcore.robot.Robot;
 
 import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
@@ -16,8 +10,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
 
-@TeleOp(name = "test", group = "teleops")
-public class TestDriveTrain extends LinearOpMode {
+@TeleOp(name = "Mecanum Drive", group = "teleops")
+public class MecanumTeleOp extends LinearOpMode {
 
     private RobotHardware robot;
 
