@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -24,7 +25,7 @@ public class Indexer {
 
     private final double oneCycle = 1453.2 * 120/72; //2422
 
-    private final int error = 75; ///50 FOR 0.5 POWER
+    private final int error = 100; ///50 FOR 0.5 POWER
 
     private boolean motorReset = false;
 
@@ -44,6 +45,7 @@ public class Indexer {
         spindexerMotor = hardwareMap.get(DcMotor.class, "spindexer");
         storage = new String[3];
         bootkicker.setDirection(Servo.Direction.REVERSE);
+        spindexerMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         spindexerMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
@@ -75,7 +77,7 @@ public class Indexer {
 
     public void kick() {
 
-            bootkicker.setPosition(105);
+            bootkicker.setPosition(45);
     }
     public String telemetry () {
         String telemMessage = "";

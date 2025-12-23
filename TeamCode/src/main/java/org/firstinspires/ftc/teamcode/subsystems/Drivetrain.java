@@ -4,6 +4,7 @@ import static android.os.SystemClock.sleep;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -24,6 +25,8 @@ public class Drivetrain {
 
     private double xOffset = -194.6;
     private double yOffset = 2.8;
+
+    private MotorGroup DriveTrainMotors;
 
     public Drivetrain (HardwareMap hardwareMap) {
 
@@ -46,11 +49,11 @@ public class Drivetrain {
         setOdometry();
 
 
-        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
     }
@@ -101,7 +104,7 @@ public class Drivetrain {
 
         //10000% need to apply some kind of PID for all motors or get the drive train motors really close on tolerance
 
-        double lfV = 0.25 * ((drive + strafe + turn) / denominator); //front left motor spins considerably faster than the other motors
+        double lfV = ((drive + strafe + turn) / denominator); //front left motor spins considerably faster than the other motors
         double lbV = ((drive - strafe + turn) / denominator);
         double rfV = ((drive - strafe - turn) / denominator);
         double rbV = ((drive + strafe - turn) / denominator);

@@ -48,6 +48,7 @@ public class MecanumTeleOp extends LinearOpMode {
         robot.init();
 
         while (opModeIsActive()) {
+//            drivetrain.testWheel();
             controllerBehaviorA();
             controllerBehaviorB();
             updateTelem();
@@ -67,7 +68,7 @@ public class MecanumTeleOp extends LinearOpMode {
     public void controllerBehaviorA () {
 
         double leftX = gamepad1.left_stick_x ; //counter imperfect strafing, straffing
-        double leftY = gamepad1.left_stick_y ; //forward and backward
+        double leftY = -gamepad1.left_stick_y ; //forward and backward
 
         double rightX = gamepad1.right_stick_x ; //rotation
         double rightY = gamepad1.right_stick_y;
