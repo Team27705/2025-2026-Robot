@@ -76,8 +76,7 @@ public class Indexer {
 
 
     public void kick() {
-
-            bootkicker.setPosition(45);
+        bootkicker.setPosition(.45);
     }
     public String telemetry () {
         String telemMessage = "";
