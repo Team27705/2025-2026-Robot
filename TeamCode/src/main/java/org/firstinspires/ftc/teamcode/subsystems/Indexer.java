@@ -19,13 +19,14 @@ public class Indexer {
 
     private double indexerGearUp = 5.0;
 
-    private final double SPINDEXER_MOTOR_RPM = 6600/50.9; //129.666012 on website is 130
+    private final double SPINDEXER_MOTOR_RPM = 6600 / 50.9; //129.666012 on website is 130
 
 //    private final int ONE_CYCLE_ENCODER_AMOUNT = (int) (MOTOR_GEARBOX_PPR * ROTATE_TO_OUTTAKE_ANGLE) + 1;
 
-    private final double oneCycle = 1453.2 * 120/72; //2422
+    private final double oneCycle = 1453.2 * 120 / 72; //2422
 
-    private final int error = 100; ///50 FOR 0.5 POWER
+    private final int error = 100;
+    /// 50 FOR 0.5 POWER
 
     private boolean motorReset = false;
 
@@ -40,7 +41,7 @@ public class Indexer {
     // **//
 
 
-    public Indexer (HardwareMap hardwareMap){
+    public Indexer(HardwareMap hardwareMap) {
         bootkicker = hardwareMap.get(Servo.class, "bootkicker");
         spindexerMotor = hardwareMap.get(DcMotor.class, "spindexer");
         storage = new String[3];
@@ -51,20 +52,21 @@ public class Indexer {
     }
 
 
-    public boolean canSpin () {
+    public boolean canSpin() {
         return spindexerMotor.getMode().equals(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //maybe use motorReset variable instead
     }
 
     public void resetServo() {
         bootkicker.setPosition(0);
     }
-    public void cycleOnce () {
-        spindexerMotor.setTargetPosition((int)oneCycle - error);
+
+    public void cycleOnce() {
+        spindexerMotor.setTargetPosition((int) oneCycle - error);
         spindexerMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         spindexerMotor.setPower(.7);
     }
 
-    public void motorStatus () {
+    public void motorStatus() {
         if (spindexerMotor.getCurrentPosition() == (int) oneCycle - error) { // maybe subtract a little from onecycle to account for momentum, also use != maybe?
             motorReset = true;
         }
@@ -78,7 +80,8 @@ public class Indexer {
     public void kick() {
         bootkicker.setPosition(.45);
     }
-    public String telemetry () {
+
+    public String telemetry() {
         String telemMessage = "";
         telemMessage += "\nSpindexer Motor Encoder : " + spindexerMotor.getCurrentPosition();
         telemMessage += "\nSpindexer Angle rotated: " + spindexerMotor.getCurrentPosition() / 72.0;
@@ -87,12 +90,11 @@ public class Indexer {
         return telemMessage;
     }
 
-    public String isSpinning () {
+    public String isSpinning() {
         String telemMessage = "\n Indexer Status: ";
         if (spindexerMotor.getCurrentPosition() != oneCycle) {
             telemMessage = "'\n Spindexer Status: Currently spinning";
-        }
-        else {
+        } else {
             telemMessage = "\n Spindexer : Ready";
         }
         return telemMessage;
